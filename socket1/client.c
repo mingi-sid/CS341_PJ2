@@ -3,6 +3,7 @@
 #include <string.h>
 
 #define DEBUG (1)
+#define MAX_STR_SIZE 255
 
 void print_param(unsigned int host, unsigned short port, char protocol);
 
@@ -49,7 +50,6 @@ int main(int argc, char* argv[]) {
 	char label = '\0';
 	for(int ii = 1; ii < argc; ii++) {
 		if(argv[ii][0] == '-' && argv[ii][2] == '\0') {
-			if(DEBUG) printf("%c", argv[ii][1]);
 			label = argv[ii][1];
 			ii++;
 			if(label == 'h') {
@@ -71,6 +71,25 @@ int main(int argc, char* argv[]) {
 		}
 	}
 	if(DEBUG == 1) print_param(param_host, param_port, param_protocol);
+
+	//Main loop. terminates when EOF is received.
+	while(1) {
+		char input_str[MAX_STR_SIZE];
+		fgets(input_str, MAX_STR_SIZE, stdin);
+		if(feof(stdin)) {
+			return 0;
+		}
+		if(input_str == NULL) {
+			return 0;
+		}
+		else if(*input_str == EOF) {
+			break;
+		}
+		else {
+			if(DEBUG == 1) printf("echo : %s", input_str);
+		}
+	}
+
 	return 0;
 }
 /*
